@@ -1,0 +1,5 @@
+export const BUSINESS_ERROR_CODE = {
+  SUCCESS: 0,
+  COMMON: 10001,
+  USER_DISABLED: 1004,
+};
