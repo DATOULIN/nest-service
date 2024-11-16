@@ -1,4 +1,16 @@
-# 生产环境配置
+# 开发环境配置
 app:
   prefix: 'api'
   port: 3000
+mysql_config:
+  synchronize: true
+  database: 'nest-service'
+  host: 'mysql-container'
+  port: '3306'
+  username: 'root'
+  password: '121729'
+  type: 'mysql'
+log_config:
+  TIMESTAMP: true
+  LOG_LEVEL: 'info'
+  LOG_ON: true

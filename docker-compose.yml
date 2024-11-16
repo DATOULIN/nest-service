@@ -12,10 +12,21 @@ services:
     build:
       context: ./
       dockerfile: ./Dockerfile
+    depends_on:
+      - mysql-container
     ports:
       - 3000:3000
     environment:
       NODE_ENV: production #  根据需要修改为 production 或其他环境
+    networks:
+      - common-network
+  mysql-container:
+    image: mysql
+    volumes:
+      - /var/lib/mysql:/var/lib/mysql
+    environment:
+      MYSQL_DATABASE: nest-service
+      MYSQL_ROOT_PASSWORD: 121729
     networks:
       - common-network
 networks:
