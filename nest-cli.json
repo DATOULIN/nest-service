@@ -1,12 +1,15 @@
 {
   "$schema": "https://json.schemastore.org/nest-cli",
   "collection": "@nestjs/schematics",
+  "generateOptions": {
+    "spec": false
+  },
   "sourceRoot": "src",
   "compilerOptions": {
     "deleteOutDir": true,
     "assets": [
       {
-        "include": "./config/*.yml",
+        "include": "./yml/*.yml",
         "outDir": "./dist"
       }
     ]

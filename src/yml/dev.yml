@@ -1,0 +1,16 @@
+# 开发环境配置
+app:
+  prefix: 'api'
+  port: 8005
+mysql_config:
+  synchronize: true
+  database: 'nest-service'
+  host: 'localhost'
+  port: '3306'
+  username: 'root'
+  password: '121729'
+  type: 'mysql'
+log_config:
+  TIMESTAMP: true
+  LOG_LEVEL: 'info'
+  LOG_ON: true

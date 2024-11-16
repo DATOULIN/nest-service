@@ -17,11 +17,24 @@ const schema = Joi.object().keys({
     port: Joi.number().default(8009).required(),
     prefix: Joi.string().required(),
   }),
+  mysql_config: Joi.object({
+    synchronize: Joi.boolean().required(),
+    database: Joi.string().required(),
+    host: Joi.string().required(),
+    port: Joi.string().required(),
+    username: Joi.string().required(),
+    password: Joi.string().required(),
+    type: Joi.string().required(),
+  }),
+  log_config: Joi.object({
+    TIMESTAMP: Joi.boolean().required(),
+    LOG_LEVEL: Joi.string().required(),
+    LOG_ON: Joi.boolean().required(),
+  }),
 });
 
 export default () => {
-  console.log(process.cwd());
-  const yamlConfig = join(__dirname, `/${configFileNameObj[env]}.yml`);
+  const yamlConfig = join(__dirname, `../yml/${configFileNameObj[env]}.yml`);
   const config = yaml.load(readFileSync(yamlConfig, 'utf8')) as Record<
     string,
     any

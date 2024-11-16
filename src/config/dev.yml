@@ -1,4 +1,0 @@
-# 开发环境配置
-app:
-  prefix: 'api'
-  port: 8005
