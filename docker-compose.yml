@@ -1,9 +1,21 @@
 version: '3.8'
 services:
+  fe-app:
+    image: crpi-t68yocakez2ijl0o.cn-hangzhou.personal.cr.aliyuncs.com/ljl_image/ljl_image:1.0
+    ports:
+      - 80:80
+    depends_on:
+      - nest-app
+    networks:
+      - common-network
   nest-app:
     build:
       context: ./
       dockerfile: ./Dockerfile
     ports:
-      - "3005:3005"
-
+      - 3000:3000
+    networks:
+      - common-network
+networks:
+  common-network:
+    driver: bridge

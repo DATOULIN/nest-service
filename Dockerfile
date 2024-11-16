@@ -1,4 +1,4 @@
-FROM node as build-stage
+FROM node AS build-stage
 
 WORKDIR /app
 
@@ -13,7 +13,7 @@ COPY . .
 RUN npm run build
 
 # production stage
-FROM node as production-stage
+FROM node AS production-stage
 
 COPY --from=build-stage /app/dist /app
 COPY --from=build-stage /app/package.json /app/package.json
@@ -24,6 +24,6 @@ RUN npm config set registry https://registry.npmmirror.com/
 
 RUN npm install --production
 
-EXPOSE 3005
+EXPOSE 3000
 
 CMD ["node", "/app/main.js"]
