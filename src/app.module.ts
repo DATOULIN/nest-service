@@ -8,8 +8,13 @@ import { HttpExceptionFilter } from './common/excetions/http.exception.filter';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { buildConnectionOptions } from './common/database/orm.config';
 import { RoleModule } from './modules/role/role.module';
+import { join } from 'path';
+import { ServeStaticModule } from '@nestjs/serve-static';
 @Module({
   imports: [
+    ServeStaticModule.forRoot({
+      rootPath: join(__dirname, '../', 'public'),
+    }),
     TypeOrmModule.forRootAsync({
       imports: [ConfigModule],
       useFactory: buildConnectionOptions,

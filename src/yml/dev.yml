@@ -5,7 +5,7 @@ app:
 mysql_config:
   synchronize: true
   database: 'nest-service'
-  host: 'localhost'
+  host: '114.55.60.209'
   port: '3306'
   username: 'root'
   password: '121729'

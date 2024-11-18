@@ -10,11 +10,14 @@ async function bootstrap() {
   //统一响应格式
   app.useGlobalInterceptors(new TransformInterceptor());
 
+  // 入参验证
   app.useGlobalPipes(new ValidationPipe());
+
+  // 允许跨域
+  app.enableCors();
 
   const config = app.get(ConfigService);
   const port = config.get<number>('app.port');
-  app.enableCors();
   await app.listen(port);
 }
 

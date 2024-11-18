@@ -11,6 +11,10 @@
       {
         "include": "./yml/*.yml",
         "outDir": "./dist"
+      },
+      {
+        "include": "../public/**",
+        "outDir": "./dist/public"
       }
     ]
   }
