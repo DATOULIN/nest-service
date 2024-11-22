@@ -31,6 +31,13 @@ const schema = Joi.object().keys({
     LOG_LEVEL: Joi.string().required(),
     LOG_ON: Joi.boolean().required(),
   }),
+  email_config: Joi.object({
+    host: Joi.string().required(),
+    port: Joi.number().required(),
+    user: Joi.string().required(),
+    password: Joi.string().required(),
+    secure: Joi.boolean().required(),
+  }),
 });
 
 export default () => {

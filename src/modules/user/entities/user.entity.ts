@@ -16,6 +16,7 @@ export class User {
   @Column({
     length: 50,
     comment: '用户名',
+    nullable: true,
   })
   username: string;
 
@@ -29,6 +30,7 @@ export class User {
     name: 'nick_name',
     length: 50,
     comment: '昵称',
+    nullable: true,
   })
   nickName: string;
 
@@ -51,18 +53,6 @@ export class User {
     nullable: true,
   })
   phoneNumber: string;
-
-  @Column({
-    comment: '是否冻结',
-    default: false,
-  })
-  isFrozen: boolean;
-
-  @Column({
-    comment: '是否是管理员',
-    default: false,
-  })
-  isAdmin: boolean;
 
   @CreateDateColumn()
   createTime: Date;

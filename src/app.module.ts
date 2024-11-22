@@ -6,10 +6,9 @@ import { APP_FILTER, APP_PIPE } from '@nestjs/core';
 import { CustomerValidationPipe } from './common/pipe/customer.validation.pipe';
 import { HttpExceptionFilter } from './common/excetions/http.exception.filter';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { buildConnectionOptions } from './common/database/orm.config';
-import { RoleModule } from './modules/role/role.module';
 import { join } from 'path';
 import { ServeStaticModule } from '@nestjs/serve-static';
+import { buildConnectionOptions } from './config/db.config';
 @Module({
   imports: [
     ServeStaticModule.forRoot({
@@ -27,7 +26,6 @@ import { ServeStaticModule } from '@nestjs/serve-static';
       isGlobal: true,
     }),
     UserModule,
-    RoleModule,
   ],
   controllers: [],
   providers: [

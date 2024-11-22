@@ -37,10 +37,9 @@ export async function buildConnectionOptions(configService: ConfigService) {
   const config = configService.get('mysql_config');
   const logFlag = configService.get('log_config')['LOG_ON'] === true;
 
-  const modulesPath = join(__dirname, '../../modules'); // modules 目录的路径
+  const modulesPath = join(__dirname, '../modules'); // modules 目录的路径
   const entities = await collectEntities(modulesPath);
 
-  console.log(entities);
   return {
     ...config,
     entities: entities,
