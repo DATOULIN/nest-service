@@ -38,6 +38,11 @@ const schema = Joi.object().keys({
     password: Joi.string().required(),
     secure: Joi.boolean().required(),
   }),
+  redis_config: Joi.object({
+    host: Joi.string().required(),
+    port: Joi.string().required(),
+    db: Joi.number().required(),
+  }),
 });
 
 export default () => {
