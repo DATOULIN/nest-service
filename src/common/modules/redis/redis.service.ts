@@ -12,7 +12,6 @@ export class RedisService {
     this.redisClient = new Redis({
       host: serverValue.host,
       port: serverValue.port,
-      password: serverValue.password,
       db: serverValue.db,
     });
     console.log('Redis service started');
