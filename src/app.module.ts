@@ -13,7 +13,7 @@ import { buildConnectionOptions } from './config/db.config';
 @Module({
   imports: [
     ServeStaticModule.forRoot({
-      rootPath: join(__dirname, '../', 'public'),
+      rootPath: join(__dirname, './', 'public'),
     }),
     TypeOrmModule.forRootAsync({
       imports: [ConfigModule],
