@@ -9,6 +9,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { join } from 'path';
 import { ServeStaticModule } from '@nestjs/serve-static';
 import { buildConnectionOptions } from './config/db.config';
+import { UploadModule } from './common/modules/upload/upload.module';
 
 @Module({
   imports: [
@@ -26,6 +27,7 @@ import { buildConnectionOptions } from './config/db.config';
       load: [configuration],
       isGlobal: true,
     }),
+    UploadModule,
     UserModule,
   ],
   controllers: [],
