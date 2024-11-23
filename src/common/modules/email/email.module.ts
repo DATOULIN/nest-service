@@ -5,6 +5,7 @@ import { EmailService } from './email.service';
 import { EmailController } from './email.controller';
 import { EmailProcessor } from './email.processer';
 import { ConfigModule, ConfigService } from '@nestjs/config';
+
 import { buildEmailConfigOptions, EmailConfig } from 'src/config/email.config';
 @Module({
   imports: [

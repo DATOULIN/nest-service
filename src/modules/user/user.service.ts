@@ -5,6 +5,7 @@ import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import { BusinessException } from '../../common/excetions/business.exception';
 import { EmailService } from '../../common/modules/email/email.service';
+import { RedisService } from '../../common/modules/redis/redis.service';
 
 @Injectable()
 export class UserService {
@@ -12,9 +13,12 @@ export class UserService {
     @InjectRepository(User)
     private readonly userRepository: Repository<User>,
     private emailService: EmailService,
+    private redisService: RedisService,
   ) {}
 
   async register(registerUserDto: RegisterUserDto) {
+    await this.redisService.set('xxx', '666');
+
     const { email } = registerUserDto;
     // 判断注册的邮箱是否存在
     const existUser = await this.userRepository.findOne({
@@ -27,7 +31,7 @@ export class UserService {
     tempUser.password = this.encodePwd(tempUser.password);
     const res = await this.userRepository.save(tempUser);
     if (res) {
-      // await this.emailService.sendWelcomeEmail({ to: res.email });
+      await this.emailService.sendWelcomeEmail({ to: res.email });
       return 'success';
     }
     throw new BusinessException('注册失败');

@@ -19,5 +19,9 @@ email_config:
   port: 465
   secure: true
   user: '1217297278@qq.com'
-  password: 'acpkitlinbjngcac'
-
+  password: 'bebfoiwceeuigbjf'
+redis_config:
+  host: '127.0.0.1'
+  port: '6379'
+  password: ''
+  db: 0
