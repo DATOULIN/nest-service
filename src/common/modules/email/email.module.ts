@@ -7,8 +7,14 @@ import { EmailProcessor } from './email.processer';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 
 import { buildEmailConfigOptions, EmailConfig } from 'src/config/email.config';
+import { buildRedisConfigOptions } from '../../../config/redis.config';
 @Module({
   imports: [
+    BullModule.forRootAsync({
+      imports: [ConfigModule],
+      useFactory: buildRedisConfigOptions,
+      inject: [ConfigService],
+    }),
     BullModule.registerQueue({
       name: EmailConfig.EmailQueueName,
     }),

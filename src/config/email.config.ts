@@ -22,7 +22,7 @@ export function buildEmailConfigOptions(configService: ConfigService) {
       from: config.user, //发送人 你的邮箱地址
     },
     template: {
-      dir: join(__dirname, '../../', 'templates'),
+      dir: join(__dirname, '../', 'templates'),
       adapter: new HandlebarsAdapter(),
     },
   };
