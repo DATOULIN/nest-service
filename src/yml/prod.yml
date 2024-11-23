@@ -23,5 +23,4 @@ email_config:
 redis_config:
   host: 'redis-container'
   port: '6379'
-  password: ''
   db: 0

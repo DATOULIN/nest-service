@@ -5,7 +5,7 @@ app:
 mysql_config:
   synchronize: true
   database: 'nest-service'
-  host: '114.55.60.209'
+  host: 'localhost'
   port: '3306'
   username: 'root'
   password: '121729'
@@ -23,5 +23,4 @@ email_config:
 redis_config:
   host: '127.0.0.1'
   port: '6379'
-  password: ''
   db: 0

@@ -17,8 +17,6 @@ export class UserService {
   ) {}
 
   async register(registerUserDto: RegisterUserDto) {
-    await this.redisService.set('xxx', '666');
-
     const { email } = registerUserDto;
     // 判断注册的邮箱是否存在
     const existUser = await this.userRepository.findOne({
