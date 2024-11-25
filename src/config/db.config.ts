@@ -2,6 +2,8 @@ import { ConfigService } from '@nestjs/config';
 import { TypeOrmModuleOptions } from '@nestjs/typeorm';
 import { join } from 'path';
 import * as fs from 'node:fs';
+import { OrmLogInterceptor } from '../common/interceptors/orm.log.interceptor';
+import { LoggerService } from '@nestjs/common';
 
 // 收集modules下面所有模块的实体
 const collectEntities = async (modulesPath: string) => {
@@ -33,7 +35,10 @@ const collectEntities = async (modulesPath: string) => {
   return entities;
 };
 
-export async function buildConnectionOptions(configService: ConfigService) {
+export async function buildConnectionOptions(
+  configService: ConfigService,
+  logger: LoggerService,
+) {
   const config = configService.get('mysql_config');
   const logFlag = configService.get('log_config')['LOG_ON'] === true;
 
@@ -44,6 +49,7 @@ export async function buildConnectionOptions(configService: ConfigService) {
     ...config,
     entities: entities,
     logging: logFlag,
+    logger: new OrmLogInterceptor(logger),
     connectorPackage: 'mysql2',
     extra: {
       authPlugin: 'sha256_password',
