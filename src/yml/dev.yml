@@ -24,3 +24,5 @@ redis_config:
   host: '114.55.60.209'
   port: '6379'
   db: 0
+security_config:
+  secret: 'justforsecret.12312'

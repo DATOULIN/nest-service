@@ -38,8 +38,12 @@ export class UserService {
     throw new BusinessException('注册失败');
   }
 
-  public encodePwd(pwd: string) {
+  private encodePwd(pwd: string) {
     const salt = bcrypt.genSaltSync(10);
     return bcrypt.hashSync(pwd, salt);
+  }
+
+  private compare(password: string, userPassword: string): boolean {
+    return bcrypt.compareSync(password, userPassword);
   }
 }

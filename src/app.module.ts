@@ -2,7 +2,7 @@ import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { UserModule } from './modules/user/user.module';
 import configuration from './config';
-import { APP_FILTER, APP_PIPE } from '@nestjs/core';
+import { APP_FILTER, APP_GUARD, APP_PIPE } from '@nestjs/core';
 import { CustomerValidationPipe } from './common/pipe/customer.validation.pipe';
 import { HttpExceptionFilter } from './common/excetions/http.exception.filter';
 import { TypeOrmModule } from '@nestjs/typeorm';
@@ -10,6 +10,8 @@ import { join } from 'path';
 import { ServeStaticModule } from '@nestjs/serve-static';
 import { buildConnectionOptions } from './config/db.config';
 import { UploadModule } from './common/modules/upload/upload.module';
+import { AuthModule } from './common/modules/auth/auth.module';
+import { JwtAuthGuard } from './common/modules/auth/guards/jwt.guard';
 
 @Module({
   imports: [
@@ -27,6 +29,7 @@ import { UploadModule } from './common/modules/upload/upload.module';
       load: [configuration],
       isGlobal: true,
     }),
+    AuthModule,
     UploadModule,
     UserModule,
   ],
@@ -39,6 +42,10 @@ import { UploadModule } from './common/modules/upload/upload.module';
     {
       provide: APP_PIPE,
       useClass: CustomerValidationPipe,
+    },
+    {
+      provide: APP_GUARD,
+      useClass: JwtAuthGuard,
     },
   ],
 })
