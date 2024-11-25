@@ -6,6 +6,18 @@ import { JwtStrategy } from '../strategies/jwt.strategy';
 import { LocalStrategy } from '../strategies/loacl.strategy';
 import { BusinessException } from '../../../excetions/business.exception';
 
+interface JwtUserData {
+  userId: number;
+  username: string;
+  email: string;
+}
+
+declare module 'express' {
+  interface Request {
+    user: JwtUserData;
+  }
+}
+
 @Injectable()
 export class JwtAuthGuard extends AuthGuard('jwt') {
   constructor(

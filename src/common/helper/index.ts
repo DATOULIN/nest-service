@@ -3,13 +3,19 @@ import {
   ExecutionContext,
   SetMetadata,
 } from '@nestjs/common';
+import { Request } from 'express';
 
 export const IS_PUBLIC_KEY = 'isPublic';
 export const SkipAuth = () => SetMetadata(IS_PUBLIC_KEY, true);
 
-export const PayloadUser = createParamDecorator(
-  (data, ctx: ExecutionContext): Payload => {
-    const request = ctx.switchToHttp().getRequest();
-    return request.user;
+// 从jwt获取userid
+export const UserInfo = createParamDecorator(
+  (data: string, ctx: ExecutionContext) => {
+    const request: Request = ctx.switchToHttp().getRequest<Request>();
+
+    if (!request.user) {
+      return null;
+    }
+    return data ? request.user[data] : request.user;
   },
 );
