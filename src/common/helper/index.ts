@@ -12,7 +12,8 @@ export const SkipAuth = () => SetMetadata(IS_PUBLIC_KEY, true);
 export const UserInfo = createParamDecorator(
   (data: string, ctx: ExecutionContext) => {
     const request: Request = ctx.switchToHttp().getRequest<Request>();
-
+    console.log(data);
+    console.log(request);
     if (!request.user) {
       return null;
     }

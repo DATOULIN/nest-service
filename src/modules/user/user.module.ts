@@ -5,9 +5,15 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { User } from './entities/user.entity';
 import { EmailModule } from '../../common/modules/email/email.module';
 import { RedisModule } from '../../common/modules/redis/redis.module';
+import { AuthModule } from '../../common/modules/auth/auth.module';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([User]), EmailModule, RedisModule],
+  imports: [
+    TypeOrmModule.forFeature([User]),
+    EmailModule,
+    RedisModule,
+    AuthModule,
+  ],
   controllers: [UserController],
   providers: [UserService],
 })

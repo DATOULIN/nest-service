@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { RegisterUserDto } from './dto/register-user.dto';
 import { User } from './entities/user.entity';
 import { Repository } from 'typeorm';
@@ -7,6 +7,7 @@ import { BusinessException } from '../../common/excetions/business.exception';
 import { EmailService } from '../../common/modules/email/email.service';
 import { RedisService } from '../../common/modules/redis/redis.service';
 import * as bcrypt from 'bcryptjs';
+import { LoginDto } from './dto/login.dto';
 
 @Injectable()
 export class UserService {
@@ -36,6 +37,24 @@ export class UserService {
       return 'success';
     }
     throw new BusinessException('注册失败');
+  }
+
+  async login(loginDto: LoginDto) {
+    const user = await this.userRepository.findOne({
+      where: {
+        email: loginDto.email,
+      },
+    });
+    if (!user) {
+      throw new BusinessException('用户不存在');
+    }
+    if (this.compare(user.password, loginDto.password)) {
+      throw new HttpException('密码错误', HttpStatus.BAD_REQUEST);
+    }
+    return {
+      id: user.id,
+      email: user.email,
+    };
   }
 
   private encodePwd(pwd: string) {

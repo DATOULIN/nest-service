@@ -52,7 +52,6 @@ export class JwtAuthGuard extends AuthGuard('jwt') {
     if (validate) {
       // 解析token
       const payload = await this.jwtStrategy.parse(token);
-
       // 验证redis中的token
       await this.jwtStrategy.validateRedisToken(token, payload);
 

@@ -20,6 +20,7 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
   createToken(payload: any): string {
     return this.jwtService.sign(payload, {
       secret: this.configService.get('security_config').secret,
+      expiresIn: '1d',
     });
   }
 
@@ -42,7 +43,7 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
     token: string,
     payload: any,
   ): Promise<boolean | never> {
-    const key = `${payload.sub}-${payload.email}`;
+    const key = `token-${payload.userId}`;
     const redis_token = await this.redisService.get(key);
 
     if (!redis_token || redis_token !== token) {
