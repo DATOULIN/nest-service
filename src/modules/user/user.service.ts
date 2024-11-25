@@ -6,6 +6,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { BusinessException } from '../../common/excetions/business.exception';
 import { EmailService } from '../../common/modules/email/email.service';
 import { RedisService } from '../../common/modules/redis/redis.service';
+import * as bcrypt from 'bcryptjs';
 
 @Injectable()
 export class UserService {
@@ -38,6 +39,7 @@ export class UserService {
   }
 
   public encodePwd(pwd: string) {
-    return pwd;
+    const salt = bcrypt.genSaltSync(10);
+    return bcrypt.hashSync(pwd, salt);
   }
 }

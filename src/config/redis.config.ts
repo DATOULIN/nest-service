@@ -6,6 +6,7 @@ export function buildRedisConfigOptions(configService: ConfigService) {
   const redisConfig = {
     host: config.host,
     port: config.port,
+    db: config.db,
   };
 
   return {
