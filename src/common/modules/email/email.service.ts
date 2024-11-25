@@ -19,8 +19,8 @@ export class EmailService {
     }
   }
 
-  async sendResetPasswordEmail(sendEmailDto: Mail) {
-    const job = await this.emailQueue.add('reset_password', sendEmailDto);
+  async sedRegisterCaptcha(sendEmailDto: Mail) {
+    const job = await this.emailQueue.add('sendRegisterCaptcha', sendEmailDto);
 
     return { jobId: job.id };
   }

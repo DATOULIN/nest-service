@@ -1,18 +1,25 @@
-import { Controller, Post, Body, Get } from '@nestjs/common';
+import { Controller, Post, Body, Get, Req, Res, Query } from '@nestjs/common';
 import { UserService } from './user.service';
 import { RegisterUserDto } from './dto/register-user.dto';
 import { LoginDto } from './dto/login.dto';
 import { SkipAuth, UserInfo } from '../../common/helper';
-import { JwtStrategy } from '../../common/modules/auth/strategies/jwt.strategy';
-import { RedisService } from '../../common/modules/redis/redis.service';
+import { AuthService } from '../../common/modules/auth/auth.service';
+import { CaptchaService } from '../../common/modules/captcha/captcha.service';
+import { BusinessException } from '../../common/excetions/business.exception';
 
 @Controller('user')
 export class UserController {
   constructor(
     private readonly userService: UserService,
-    private jwtStrategy: JwtStrategy,
-    private redisService: RedisService,
+    private authService: AuthService,
+    private captchaService: CaptchaService,
   ) {}
+
+  @SkipAuth()
+  @Get('register-captcha')
+  async sendCaptcha(@Query('email') email: string) {
+    await this.captchaService.sendCaptcha('register', email);
+  }
 
   /**
    *注册
@@ -30,8 +37,7 @@ export class UserController {
   @Post('login')
   async login(@Body() loginDto: LoginDto) {
     const vo = await this.userService.login(loginDto);
-    const token = this.jwtStrategy.createToken({ userId: vo.id });
-    await this.redisService.set(`token-${vo.id}`, token);
+    const token = await this.authService.getToken(vo.id);
 
     return {
       data: vo,
@@ -39,6 +45,9 @@ export class UserController {
     };
   }
 
+  /**
+   * 获取用户信息
+   * */
   @Get('info')
   async info(@UserInfo('userId') userId: number) {
     return userId;

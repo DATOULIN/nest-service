@@ -45,10 +45,17 @@ export class UserService {
         email: loginDto.email,
       },
     });
+
     if (!user) {
       throw new BusinessException('用户不存在');
     }
-    if (this.compare(user.password, loginDto.password)) {
+    console.log(
+      'this.compare(user.password, loginDto.password)',
+      user.password,
+      loginDto.password,
+      this.compare(user.password, loginDto.password),
+    );
+    if (!this.compare(loginDto.password, user.password)) {
       throw new HttpException('密码错误', HttpStatus.BAD_REQUEST);
     }
     return {
@@ -62,6 +69,10 @@ export class UserService {
     return bcrypt.hashSync(pwd, salt);
   }
 
+  /**
+   * @password 数据库存的密码
+   * @userPassword 用户输入的密码
+   * */
   private compare(password: string, userPassword: string): boolean {
     return bcrypt.compareSync(password, userPassword);
   }

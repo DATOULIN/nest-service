@@ -5,6 +5,7 @@ import { Strategy } from 'passport-local';
 import { PassportStrategy } from '@nestjs/passport';
 import { RedisService } from '../../redis/redis.service';
 import { BusinessException } from '../../../excetions/business.exception';
+import { KeyEnum } from '../../../../enums';
 
 @Injectable()
 export class JwtStrategy extends PassportStrategy(Strategy) {
@@ -43,7 +44,7 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
     token: string,
     payload: any,
   ): Promise<boolean | never> {
-    const key = `token-${payload.userId}`;
+    const key = `${KeyEnum.TOKEN}-${payload.userId}`;
     const redis_token = await this.redisService.get(key);
 
     if (!redis_token || redis_token !== token) {
