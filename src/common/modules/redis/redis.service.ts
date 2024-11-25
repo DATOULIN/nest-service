@@ -1,18 +1,19 @@
 import { Injectable } from '@nestjs/common';
 import Redis from 'ioredis';
 import { ConfigService } from '@nestjs/config';
+import { buildRedisConfigOptions } from '../../../config/redis.config';
 
 @Injectable()
 export class RedisService {
   private readonly redisClient: Redis;
 
   constructor(private configService: ConfigService) {
-    const serverValue = this.configService.get<any>('redis_config');
+    const serverValue = buildRedisConfigOptions(configService);
 
     this.redisClient = new Redis({
-      host: serverValue.host,
-      port: serverValue.port,
-      db: serverValue.db,
+      host: serverValue.redis.host,
+      port: serverValue.redis.port,
+      db: serverValue.redis.db,
     });
     console.log('Redis service started');
   }

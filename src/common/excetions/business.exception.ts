@@ -23,4 +23,22 @@ export class BusinessException extends HttpException {
       message: 'success',
     });
   }
+
+  static throwForbidden() {
+    throw new HttpException('Forbidden', HttpStatus.FORBIDDEN);
+  }
+
+  static throwTokenNotEmpty() {
+    throw new BusinessException({
+      code: BUSINESS_ERROR_CODE.TOKEN_EMPTY,
+      message: 'token不能为空',
+    });
+  }
+
+  static throwInvalid() {
+    throw new BusinessException({
+      code: BUSINESS_ERROR_CODE.TOKEN_INVALID,
+      message: 'token已失效',
+    });
+  }
 }

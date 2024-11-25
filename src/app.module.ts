@@ -2,7 +2,7 @@ import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { UserModule } from './modules/user/user.module';
 import configuration from './config';
-import { APP_FILTER, APP_INTERCEPTOR, APP_PIPE } from '@nestjs/core';
+import { APP_FILTER, APP_INTERCEPTOR, APP_PIPE, APP_GUARD } from '@nestjs/core';
 import { CustomerValidationPipe } from './common/pipe/customer.validation.pipe';
 import { HttpExceptionFilter } from './common/excetions/http.exception.filter';
 import { TypeOrmModule } from '@nestjs/typeorm';
@@ -14,6 +14,8 @@ import { Logger } from 'winston';
 import { LoggerModule } from './common/modules/logger/logger.module';
 import { RequestLogInterceptor } from './common/interceptors/request.log.interceptor';
 import { WINSTON_MODULE_NEST_PROVIDER } from 'nest-winston';
+import { AuthModule } from './common/modules/auth/auth.module';
+import { JwtAuthGuard } from './common/modules/auth/guards/jwt.guard';
 
 @Module({
   imports: [
@@ -32,6 +34,7 @@ import { WINSTON_MODULE_NEST_PROVIDER } from 'nest-winston';
       isGlobal: true,
     }),
     LoggerModule,
+    AuthModule,
     UploadModule,
     UserModule,
   ],
@@ -48,6 +51,10 @@ import { WINSTON_MODULE_NEST_PROVIDER } from 'nest-winston';
     {
       provide: APP_INTERCEPTOR,
       useClass: RequestLogInterceptor,
+    },
+    {
+      provide: APP_GUARD,
+      useClass: JwtAuthGuard,
     },
   ],
 })

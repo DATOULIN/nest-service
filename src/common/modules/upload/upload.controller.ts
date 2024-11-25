@@ -9,9 +9,12 @@ import {
 } from '@nestjs/common';
 import { FilesInterceptor } from '@nestjs/platform-express';
 import * as fs from 'node:fs';
+import { UploadService } from './upload.service';
 
 @Controller()
 export class UploadController {
+  constructor(private readonly uploadService: UploadService) {}
+
   @Post('upload')
   @UseInterceptors(
     FilesInterceptor('files', 20, {
@@ -25,48 +28,11 @@ export class UploadController {
     console.log('body', body);
     console.log('files', files);
 
-    const fileName = body.name.match(/(.+)\-\d+$/)[1];
-    const chunkDir = 'uploads/chunks_' + fileName;
-
-    if (!fs.existsSync(chunkDir)) {
-      fs.mkdirSync(chunkDir);
-    }
-    fs.cpSync(files[0].path, chunkDir + '/' + body.name);
-    fs.rmSync(files[0].path);
+    return this.uploadService.chunkUpload(files, body);
   }
 
   @Get('merge')
   merge(@Query('name') name: string) {
-    const chunkDir = 'uploads/chunks_' + name;
-
-    const files = fs.readdirSync(chunkDir);
-
-    let count = 0;
-    let startPos = 0;
-    files.map((file) => {
-      const filePath = chunkDir + '/' + file;
-      const stream = fs.createReadStream(filePath);
-      stream
-        .pipe(
-          fs.createWriteStream('uploads/' + name, {
-            start: startPos,
-          }),
-        )
-        .on('finish', () => {
-          count++;
-
-          if (count === files.length) {
-            fs.rm(
-              chunkDir,
-              {
-                recursive: true,
-              },
-              () => {},
-            );
-          }
-        });
-
-      startPos += fs.statSync(filePath).size;
-    });
+    return this.uploadService.merge(name);
   }
 }

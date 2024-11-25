@@ -1,14 +1,23 @@
-import { Controller, Post, Body } from '@nestjs/common';
+import { Controller, Post, Body, Get } from '@nestjs/common';
 import { UserService } from './user.service';
 import { RegisterUserDto } from './dto/register-user.dto';
+import { LoginDto } from './dto/login.dto';
+import { SkipAuth, UserInfo } from '../../common/helper';
+import { JwtStrategy } from '../../common/modules/auth/strategies/jwt.strategy';
+import { RedisService } from '../../common/modules/redis/redis.service';
 
 @Controller('user')
 export class UserController {
-  constructor(private readonly userService: UserService) {}
+  constructor(
+    private readonly userService: UserService,
+    private jwtStrategy: JwtStrategy,
+    private redisService: RedisService,
+  ) {}
 
   /**
    *注册
    */
+  @SkipAuth()
   @Post('register')
   register(@Body() registerUserDto: RegisterUserDto) {
     return this.userService.register(registerUserDto);
@@ -17,24 +26,21 @@ export class UserController {
   /**
    *登录
    */
+  @SkipAuth()
   @Post('login')
-  login(@Body() createUserDto: RegisterUserDto) {
-    return this.userService.register(createUserDto);
+  async login(@Body() loginDto: LoginDto) {
+    const vo = await this.userService.login(loginDto);
+    const token = this.jwtStrategy.createToken({ userId: vo.id });
+    await this.redisService.set(`token-${vo.id}`, token);
+
+    return {
+      data: vo,
+      token,
+    };
   }
 
-  /**
-   *修改个人信息
-   */
-  @Post('update')
-  update(@Body() createUserDto: RegisterUserDto) {
-    return this.userService.register(createUserDto);
-  }
-
-  /**
-   *修改密码
-   */
-  @Post('update_pwd')
-  updatePwd(@Body() createUserDto: RegisterUserDto) {
-    return this.userService.register(createUserDto);
+  @Get('info')
+  async info(@UserInfo('userId') userId: number) {
+    return userId;
   }
 }
