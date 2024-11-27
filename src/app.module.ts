@@ -10,11 +10,14 @@ import { join } from 'path';
 import { ServeStaticModule } from '@nestjs/serve-static';
 import { buildConnectionOptions } from './config/db.config';
 import { UploadModule } from './common/modules/upload/upload.module';
-import { LoggerModule } from './common/modules/logger/logger.module';
 import { AuthModule } from './common/modules/auth/auth.module';
 import { JwtAuthGuard } from './common/guards/jwt.guard';
 import { APP_INTERCEPTOR } from '@nestjs/core/constants';
 import { TransformInterceptor } from './common/interceptors/transform.interceptor';
+import { WinstonModule } from './common/modules/logger/logger.module';
+import { format, transports } from 'winston';
+import * as DailyRotateFile from 'winston-daily-rotate-file';
+import * as winston from 'winston';
 
 @Module({
   imports: [
@@ -32,7 +35,41 @@ import { TransformInterceptor } from './common/interceptors/transform.intercepto
       load: [configuration],
       isGlobal: true,
     }),
-    LoggerModule,
+    WinstonModule.forRootAsync({
+      useValue: () => {
+        return {
+          level: 'debug',
+          transports: [
+            new transports.Console({
+              format: format.combine(
+                format.colorize(),
+                format.printf(({ context, level, message, time }) => {
+                  const appStr = `[NEST]`;
+                  const contextStr = `[${context}]`;
+
+                  return `${appStr} ${time} ${level} ${contextStr} ${message} `;
+                }),
+              ),
+            }),
+            new DailyRotateFile({
+              dirname: 'logs', // 日志保存的目录
+              filename: `error-%DATE%.log`, // 日志名称，占位符 %DATE% 取值为 datePattern 值。
+              datePattern: 'YYYY-MM-DD-HH', // 日志轮换的频率，此处表示每天。
+              zippedArchive: true, // 是否通过压缩的方式归档被轮换的日志文件。
+              maxSize: '20m', // 设置日志文件的最大大小，m 表示 mb 。
+              maxFiles: '14d', // 保留日志文件的最大天数，此处表示自动删除超过 14 天的日志文件。
+              // 记录时添加时间戳信息
+              format: winston.format.combine(
+                winston.format.timestamp({
+                  format: 'YYYY-MM-DD HH:mm:ss',
+                }),
+                winston.format.simple(),
+              ),
+            }),
+          ],
+        };
+      },
+    }),
     AuthModule,
     UploadModule,
     UserModule,

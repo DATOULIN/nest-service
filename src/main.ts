@@ -1,14 +1,11 @@
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { ConfigService } from '@nestjs/config';
-
-import { WINSTON_MODULE_NEST_PROVIDER } from 'nest-winston';
+import { WINSTON_LOGGER_TOKEN } from './common/modules/logger/logger.module';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
-  // 日志记录
-  app.useLogger(app.get(WINSTON_MODULE_NEST_PROVIDER));
-
+  app.useLogger(app.get(WINSTON_LOGGER_TOKEN));
   // 允许跨域
   app.enableCors();
 
