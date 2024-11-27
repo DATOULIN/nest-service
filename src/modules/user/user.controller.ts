@@ -2,7 +2,7 @@ import { Controller, Post, Body, Get, Req, Res, Query } from '@nestjs/common';
 import { UserService } from './user.service';
 import { RegisterUserDto } from './dto/register-user.dto';
 import { LoginDto } from './dto/login.dto';
-import { SkipAuth, UserInfo } from '../../common/helper';
+import { SkipAuth, UserInfo } from '../../common/decorator';
 import { AuthService } from '../../common/modules/auth/auth.service';
 import { CaptchaService } from '../../common/modules/captcha/captcha.service';
 import { BusinessException } from '../../common/excetions/business.exception';

@@ -15,7 +15,7 @@ import { LoggerModule } from './common/modules/logger/logger.module';
 import { RequestLogInterceptor } from './common/interceptors/request.log.interceptor';
 import { WINSTON_MODULE_NEST_PROVIDER } from 'nest-winston';
 import { AuthModule } from './common/modules/auth/auth.module';
-import { JwtAuthGuard } from './common/modules/auth/guards/jwt.guard';
+import { JwtAuthGuard } from './common/guards/jwt.guard';
 
 @Module({
   imports: [

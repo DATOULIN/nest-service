@@ -1,5 +1,5 @@
 import { Controller, Get, Query } from '@nestjs/common';
-import { SkipAuth, UserInfo } from '../../helper';
+import { SkipAuth, UserInfo } from '../../decorator';
 import { AuthService } from './auth.service';
 
 @Controller('auth')
