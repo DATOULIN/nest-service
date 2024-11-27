@@ -2,7 +2,7 @@ import { InjectQueue } from '@nestjs/bull';
 import { Injectable } from '@nestjs/common';
 import { Queue } from 'bull';
 import { Mail } from './dto/send-email.dto';
-import { BusinessException } from '../../excetions/business.exception';
+import { BusinessException } from '../../filters/business.exception';
 
 @Injectable()
 export class EmailService {

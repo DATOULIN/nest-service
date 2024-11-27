@@ -2,20 +2,19 @@ import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { UserModule } from './modules/user/user.module';
 import configuration from './config';
-import { APP_FILTER, APP_INTERCEPTOR, APP_PIPE, APP_GUARD } from '@nestjs/core';
+import { APP_FILTER, APP_PIPE, APP_GUARD } from '@nestjs/core';
 import { CustomerValidationPipe } from './common/pipe/customer.validation.pipe';
-import { HttpExceptionFilter } from './common/excetions/http.exception.filter';
+import { HttpExceptionFilter } from './common/filters/http.exception.filter';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { join } from 'path';
 import { ServeStaticModule } from '@nestjs/serve-static';
 import { buildConnectionOptions } from './config/db.config';
 import { UploadModule } from './common/modules/upload/upload.module';
-import { Logger } from 'winston';
 import { LoggerModule } from './common/modules/logger/logger.module';
-import { RequestLogInterceptor } from './common/interceptors/request.log.interceptor';
-import { WINSTON_MODULE_NEST_PROVIDER } from 'nest-winston';
 import { AuthModule } from './common/modules/auth/auth.module';
 import { JwtAuthGuard } from './common/guards/jwt.guard';
+import { APP_INTERCEPTOR } from '@nestjs/core/constants';
+import { TransformInterceptor } from './common/interceptors/transform.interceptor';
 
 @Module({
   imports: [
@@ -25,7 +24,7 @@ import { JwtAuthGuard } from './common/guards/jwt.guard';
     TypeOrmModule.forRootAsync({
       imports: [ConfigModule],
       useFactory: buildConnectionOptions,
-      inject: [ConfigService, WINSTON_MODULE_NEST_PROVIDER],
+      inject: [ConfigService],
     }),
     // 配置模块
     ConfigModule.forRoot({
@@ -40,18 +39,22 @@ import { JwtAuthGuard } from './common/guards/jwt.guard';
   ],
   controllers: [],
   providers: [
+    // 统一响应格式
+    {
+      provide: APP_INTERCEPTOR,
+      useClass: TransformInterceptor,
+    },
+    // 拦截http异常
     {
       provide: APP_FILTER,
       useClass: HttpExceptionFilter,
     },
+    // 验证管道
     {
       provide: APP_PIPE,
       useClass: CustomerValidationPipe,
     },
-    {
-      provide: APP_INTERCEPTOR,
-      useClass: RequestLogInterceptor,
-    },
+    // 鉴权
     {
       provide: APP_GUARD,
       useClass: JwtAuthGuard,

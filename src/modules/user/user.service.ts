@@ -3,7 +3,7 @@ import { RegisterUserDto } from './dto/register-user.dto';
 import { User } from './entities/user.entity';
 import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
-import { BusinessException } from '../../common/excetions/business.exception';
+import { BusinessException } from '../../common/filters/business.exception';
 import { EmailService } from '../../common/modules/email/email.service';
 import { RedisService } from '../../common/modules/redis/redis.service';
 import * as bcrypt from 'bcryptjs';

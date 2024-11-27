@@ -5,7 +5,7 @@ import { LoginDto } from './dto/login.dto';
 import { SkipAuth, UserInfo } from '../../common/decorator';
 import { AuthService } from '../../common/modules/auth/auth.service';
 import { CaptchaService } from '../../common/modules/captcha/captcha.service';
-import { BusinessException } from '../../common/excetions/business.exception';
+import { BusinessException } from '../../common/filters/business.exception';
 
 @Controller('user')
 export class UserController {

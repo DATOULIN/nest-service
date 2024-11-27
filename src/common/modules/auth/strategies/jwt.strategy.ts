@@ -4,7 +4,7 @@ import { ConfigService } from '@nestjs/config';
 import { Strategy } from 'passport-local';
 import { PassportStrategy } from '@nestjs/passport';
 import { RedisService } from '../../redis/redis.service';
-import { BusinessException } from '../../../excetions/business.exception';
+import { BusinessException } from '../../../filters/business.exception';
 import { KeyEnum } from '../../../../enums';
 
 @Injectable()

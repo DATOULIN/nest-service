@@ -4,7 +4,7 @@ import { AuthGuard } from '@nestjs/passport';
 import { IS_PUBLIC_KEY } from 'src/common/decorator';
 import { LocalStrategy } from '../modules/auth/strategies/loacl.strategy';
 import { JwtStrategy } from '../modules/auth/strategies/jwt.strategy';
-import { BusinessException } from '../excetions/business.exception';
+import { BusinessException } from '../filters/business.exception';
 
 interface JwtUserData {
   userId: number;

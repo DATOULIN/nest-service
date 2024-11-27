@@ -5,10 +5,12 @@ import {
   NestInterceptor,
 } from '@nestjs/common';
 import { map, Observable } from 'rxjs';
+import { BUSINESS_ERROR_CODE } from '../errorCode/business.error.codes';
 
 interface Response<T> {
   result: T;
 }
+
 @Injectable()
 export class TransformInterceptor<T>
   implements NestInterceptor<T, Response<T>>
@@ -17,11 +19,9 @@ export class TransformInterceptor<T>
     context: ExecutionContext,
     next: CallHandler<T>,
   ): Observable<Response<T>> {
-    const request = context.switchToHttp().getRequest();
     return next.handle().pipe(
       map((data) => ({
-        cmd: request.url,
-        code: 0,
+        code: BUSINESS_ERROR_CODE.SUCCESS,
         result: data,
         responseTime: new Date(),
       })),
