@@ -1,28 +1,18 @@
-import { DynamicModule, Global, Module } from '@nestjs/common';
-import { LoggerOptions } from 'winston';
-import { MyLogger } from './MyLogger';
+import { Module } from '@nestjs/common';
+import { WinstonModule } from 'nest-winston';
+import { ConfigService } from '@nestjs/config';
 
-export const WINSTON_LOGGER_TOKEN = 'WINSTON_LOGGER';
+import { LoggerService } from './logger.service';
 
-@Global()
-@Module({})
-export class WinstonModule {
-  public static forRootAsync({
-    useValue,
-  }: {
-    useValue: () => LoggerOptions;
-  }): DynamicModule {
-    const options = useValue();
-    return {
-      module: WinstonModule,
-      imports: [],
-      providers: [
-        {
-          provide: WINSTON_LOGGER_TOKEN,
-          useValue: new MyLogger(options),
-        },
-      ],
-      exports: [WINSTON_LOGGER_TOKEN],
-    };
-  }
-}
+import { buildLoggerConfigOption } from '../../../config/logger.config';
+
+@Module({
+  imports: [
+    WinstonModule.forRootAsync({
+      inject: [ConfigService],
+      useFactory: buildLoggerConfigOption,
+    }),
+  ],
+  providers: [LoggerService],
+})
+export class LoggerModule {}
