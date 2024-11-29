@@ -1,5 +1,5 @@
 import { HttpException, HttpStatus } from '@nestjs/common';
-import { BUSINESS_ERROR_CODE } from '../errorCode/business.error.codes';
+import { BUSINESS_CODE } from '../../enums/businessCodeEnum';
 
 type BusinessError = {
   code: number;
@@ -10,7 +10,7 @@ export class BusinessException extends HttpException {
   constructor(error: BusinessError | string) {
     if (typeof error === 'string') {
       error = {
-        code: BUSINESS_ERROR_CODE.COMMON,
+        code: BUSINESS_CODE.COMMON,
         message: error,
       };
     }
@@ -19,7 +19,7 @@ export class BusinessException extends HttpException {
 
   static throwSuccess() {
     throw new BusinessException({
-      code: BUSINESS_ERROR_CODE.SUCCESS,
+      code: BUSINESS_CODE.SUCCESS,
       message: 'success',
     });
   }
@@ -30,14 +30,14 @@ export class BusinessException extends HttpException {
 
   static throwTokenNotEmpty() {
     throw new BusinessException({
-      code: BUSINESS_ERROR_CODE.TOKEN_EMPTY,
+      code: BUSINESS_CODE.TOKEN_EMPTY,
       message: 'token不能为空',
     });
   }
 
   static throwInvalid() {
     throw new BusinessException({
-      code: BUSINESS_ERROR_CODE.TOKEN_INVALID,
+      code: BUSINESS_CODE.TOKEN_INVALID,
       message: 'token已失效',
     });
   }

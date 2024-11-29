@@ -10,11 +10,12 @@ import { join } from 'path';
 import { ServeStaticModule } from '@nestjs/serve-static';
 import { buildConnectionOptions } from './config/db.config';
 import { UploadModule } from './common/modules/upload/upload.module';
-import { AuthModule } from './common/modules/auth/auth.module';
+import { AuthModule } from './modules/auth/auth.module';
 import { JwtAuthGuard } from './common/guards/jwt.guard';
 import { APP_INTERCEPTOR } from '@nestjs/core/constants';
 import { TransformInterceptor } from './common/interceptors/transform.interceptor';
 import { LoggerModule } from './common/modules/logger/logger.module';
+import { CaptchaModule } from './common/modules/captcha/captcha.module';
 
 @Module({
   imports: [
@@ -36,6 +37,7 @@ import { LoggerModule } from './common/modules/logger/logger.module';
     AuthModule,
     UploadModule,
     UserModule,
+    CaptchaModule,
   ],
   controllers: [],
   providers: [

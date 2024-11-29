@@ -1,6 +1,6 @@
-import { IsEmail, IsNotEmpty, Min, MinLength } from 'class-validator';
+import { IsEmail, IsNotEmpty, MinLength } from 'class-validator';
 
-export class RegisterUserDto {
+export class ResetPasswordDto {
   @IsEmail()
   email: string;
   @IsNotEmpty({ message: '密码不能为空' })

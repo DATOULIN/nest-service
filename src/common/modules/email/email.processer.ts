@@ -23,9 +23,8 @@ export class EmailProcessor {
   @Process('sendRegisterCaptcha')
   async sendResetPasswordEmail(job: Job<Mail>) {
     const { data } = job;
-    console.log(data);
     await this.mailService.sendMail({
-      to: data.to,
+      ...data,
       subject: 'Captcha',
       template: 'sendRegisterCaptcha',
       context: {

@@ -5,7 +5,7 @@ import {
   NestInterceptor,
 } from '@nestjs/common';
 import { map, Observable } from 'rxjs';
-import { BUSINESS_ERROR_CODE } from '../errorCode/business.error.codes';
+import { BUSINESS_CODE } from '../../enums/businessCodeEnum';
 
 interface Response<T> {
   result: T;
@@ -21,7 +21,7 @@ export class TransformInterceptor<T>
   ): Observable<Response<T>> {
     return next.handle().pipe(
       map((data) => ({
-        code: BUSINESS_ERROR_CODE.SUCCESS,
+        code: BUSINESS_CODE.SUCCESS,
         result: data,
         responseTime: new Date(),
       })),

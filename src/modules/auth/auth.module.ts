@@ -4,7 +4,7 @@ import { AuthService } from './auth.service';
 import { JwtStrategy } from './strategies/jwt.strategy';
 import { JwtModule } from '@nestjs/jwt';
 import { LocalStrategy } from './strategies/loacl.strategy';
-import { RedisModule } from '../redis/redis.module';
+import { RedisModule } from '../../common/modules/redis/redis.module';
 
 @Module({
   imports: [

@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { RedisService } from '../redis/redis.service';
 import { EmailService } from '../email/email.service';
+import { BusinessException } from '../../filters/business.exception';
 
 @Injectable()
 export class CaptchaService {
@@ -14,12 +15,12 @@ export class CaptchaService {
    * @address 发送邮箱
    * */
   async sendCaptcha(key: string, email: string) {
-    const captcha = await this.redisService.get(`${key}-${email}`);
-    if (captcha) {
-      return '发送太频繁！';
+    const code = await this.redisService.get(`${key}-${email}`);
+    if (code) {
+      throw new BusinessException('验证码发生太频繁');
     }
-    const code = Math.random().toString().slice(2, 8);
-    await this.redisService.set(`${key}-${email}`, code, 60);
-    await this.emailService.sedRegisterCaptcha({ to: email, code });
+    const randomCode = Math.random().toString().slice(2, 8);
+    await this.redisService.set(`${key}-${email}`, randomCode, 60);
+    await this.emailService.sedRegisterCaptcha({ to: email, code: randomCode });
   }
 }

@@ -21,7 +21,10 @@ export class EmailService {
 
   async sedRegisterCaptcha(sendEmailDto: Mail) {
     const job = await this.emailQueue.add('sendRegisterCaptcha', sendEmailDto);
-
-    return { jobId: job.id };
+    if (job.id) {
+      return 'success';
+    } else {
+      throw new BusinessException('发送失败');
+    }
   }
 }

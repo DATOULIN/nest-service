@@ -3,9 +3,9 @@ import { JwtService } from '@nestjs/jwt';
 import { ConfigService } from '@nestjs/config';
 import { Strategy } from 'passport-local';
 import { PassportStrategy } from '@nestjs/passport';
-import { RedisService } from '../../redis/redis.service';
-import { BusinessException } from '../../../filters/business.exception';
-import { KeyEnum } from '../../../../enums';
+import { RedisService } from '../../../common/modules/redis/redis.service';
+import { BusinessException } from '../../../common/filters/business.exception';
+import { RedisCodeEnum } from '../../../enums/redisCodeEnum';
 
 @Injectable()
 export class JwtStrategy extends PassportStrategy(Strategy) {
@@ -18,10 +18,10 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
   }
 
   // 生成token
-  createToken(payload: any): string {
+  createToken(payload: Payload): string {
     return this.jwtService.sign(payload, {
       secret: this.configService.get('security_config').secret,
-      expiresIn: '1d',
+      expiresIn: this.configService.get('security_config').expiresIn,
     });
   }
 
@@ -44,7 +44,7 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
     token: string,
     payload: any,
   ): Promise<boolean | never> {
-    const key = `${KeyEnum.TOKEN}-${payload.userId}`;
+    const key = `${RedisCodeEnum.TOKEN}-${payload.userId}`;
     const redis_token = await this.redisService.get(key);
 
     if (!redis_token || redis_token !== token) {

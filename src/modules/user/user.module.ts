@@ -5,8 +5,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { User } from './entities/user.entity';
 import { EmailModule } from '../../common/modules/email/email.module';
 import { RedisModule } from '../../common/modules/redis/redis.module';
-import { AuthModule } from '../../common/modules/auth/auth.module';
-import { CaptchaModule } from '../../common/modules/captcha/captcha.module';
+import { AuthModule } from '../auth/auth.module';
 
 @Module({
   imports: [
@@ -14,7 +13,6 @@ import { CaptchaModule } from '../../common/modules/captcha/captcha.module';
     EmailModule,
     RedisModule,
     AuthModule,
-    CaptchaModule,
   ],
   controllers: [UserController],
   providers: [UserService],
