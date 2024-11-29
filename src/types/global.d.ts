@@ -1,4 +1,4 @@
 declare type Payload = {
-  userId: number;
+  userId: string;
   email?: string;
 };

@@ -8,7 +8,7 @@ export class CheckInController {
 
   @Post()
   async checkin(
-    @UserInfo('userId') userId: number,
+    @UserInfo('userId') userId: string,
   ): Promise<{ message: string }> {
     const result = await this.checkinService.checkin(userId);
     return { message: result };
@@ -16,7 +16,7 @@ export class CheckInController {
 
   @Get('status')
   async getCheckinStatus(
-    @UserInfo('userId') userId: number,
+    @UserInfo('userId') userId: string,
   ): Promise<{ checkedIn: boolean }> {
     const checkedIn = await this.checkinService.getCheckinStatus(userId);
     return { checkedIn };

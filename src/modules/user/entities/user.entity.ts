@@ -1,4 +1,5 @@
 import {
+  BeforeInsert,
   Column,
   CreateDateColumn,
   Entity,
@@ -7,13 +8,14 @@ import {
   UpdateDateColumn,
 } from 'typeorm';
 import { Checkin } from '../../checkIn/entities/checkIn.entity';
+import { encodePwd } from '../../../utils/pwd';
 
 @Entity({
   name: 'users',
 })
 export class User {
-  @PrimaryGeneratedColumn()
-  id: number;
+  @PrimaryGeneratedColumn('uuid')
+  id: string;
 
   @Column({
     length: 50,
@@ -64,4 +66,9 @@ export class User {
 
   @OneToMany(() => Checkin, (checkin) => checkin.user) // 与 Checkin 实体建立一对多关系
   checkins: Checkin[];
+
+  @BeforeInsert()
+  async encryptPwd() {
+    this.password = await encodePwd(this.password);
+  }
 }

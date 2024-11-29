@@ -12,10 +12,10 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { BusinessException } from '../../common/filters/business.exception';
 import { EmailService } from '../../common/modules/email/email.service';
 import { RedisService } from '../../common/modules/redis/redis.service';
-import * as bcrypt from 'bcryptjs';
 import { LoginDto } from './dto/login.dto';
 import { ResetPasswordDto } from './dto/reset-password.dto';
 import { WINSTON_MODULE_NEST_PROVIDER } from 'nest-winston';
+import { compare, encodePwd } from '../../utils/pwd';
 
 @Injectable()
 export class UserService {
@@ -38,7 +38,6 @@ export class UserService {
       return 'isExist';
     }
     const tempUser = this.userRepository.create(registerUserDto);
-    tempUser.password = this.encodePwd(tempUser.password);
     try {
       await this.userRepository.save(tempUser);
       await this.emailService.sendWelcomeEmail({ to: tempUser.email });
@@ -59,17 +58,12 @@ export class UserService {
     if (!user) {
       throw new BusinessException('用户不存在');
     }
-    console.log(
-      'this.compare(user.password, loginDto.password)',
-      user.password,
-      loginDto.password,
-      this.compare(user.password, loginDto.password),
-    );
-    if (!this.compare(loginDto.password, user.password)) {
+
+    if (!compare(loginDto.password, user.password)) {
       throw new HttpException('密码错误', HttpStatus.BAD_REQUEST);
     }
     return {
-      id: user.id,
+      userId: user.id,
       email: user.email,
     };
   }
@@ -85,7 +79,7 @@ export class UserService {
     const foundUser = await this.userRepository.findOneBy({
       email,
     });
-    foundUser.password = this.encodePwd(password);
+    foundUser.password = await encodePwd(password);
     try {
       await this.userRepository.save(foundUser);
       return 'success';
@@ -95,12 +89,11 @@ export class UserService {
     }
   }
 
-  async getUserInfo(userId: number) {
+  async getUserInfo(userId: string) {
     try {
-      const user = await this.userRepository.findOne({
+      return await this.userRepository.findOne({
         where: { id: userId },
       });
-      return user;
     } catch (e) {
       this.logger.error(e, { UserService });
       return 'error';
@@ -112,20 +105,5 @@ export class UserService {
       where: { ...params },
     });
     return !!existUser;
-  }
-
-  // 密码加密
-  private encodePwd(pwd: string) {
-    const salt = bcrypt.genSaltSync(10);
-    return bcrypt.hashSync(pwd, salt);
-  }
-
-  /**
-   * 对比密码
-   * @password 数据库存的密码
-   * @userPassword 用户输入的密码
-   * */
-  private compare(password: string, userPassword: string): boolean {
-    return bcrypt.compareSync(password, userPassword);
   }
 }

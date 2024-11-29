@@ -8,5 +8,5 @@ export class ResetPasswordDto {
   password: string;
 
   @IsNotEmpty({ message: '验证码不能为空' })
-  captcha: number;
+  captcha: string;
 }

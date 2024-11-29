@@ -17,7 +17,6 @@ export class CaptchaController {
   async sendCaptcha(@Body() captchaDto: CaptchaDto) {
     switch (captchaDto.businessType) {
       case CaptchaBusinessTypeEnum.REGISTER:
-        console.log('enter1');
         await this.captchaService.sendCaptcha(
           RedisCodeEnum.REGISTER_CAPTCHA,
           captchaDto.email,

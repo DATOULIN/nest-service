@@ -4,7 +4,7 @@ app:
   port: 8005
 mysql_config:
   synchronize: true
-  database: 'nest-service-dev'
+  database: 'nest-service'
   host: '114.55.60.209'
   port: '3306'
   username: 'root'
@@ -27,3 +27,4 @@ redis_config:
 security_config:
   secret: 'justforsecret.12312'
   expiresIn: '1d'
+

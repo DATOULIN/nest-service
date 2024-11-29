@@ -17,12 +17,11 @@ export class CheckinService {
     private checkinRepository: Repository<Checkin>,
   ) {}
 
-  async checkin(userId: number): Promise<string> {
+  async checkin(userId: string): Promise<string> {
     const today = new Date();
     today.setHours(0, 0, 0, 0);
 
     const yesterday = getYesterday(); // 计算昨天日期
-
     const existingCheckin = await this.checkinRepository.findOne({
       where: { user: { id: userId }, date: today },
     });
@@ -60,7 +59,7 @@ export class CheckinService {
     return '签到成功';
   }
 
-  async getCheckinStatus(userId: number): Promise<boolean> {
+  async getCheckinStatus(userId: string): Promise<boolean> {
     const today = new Date();
     today.setHours(0, 0, 0, 0);
 

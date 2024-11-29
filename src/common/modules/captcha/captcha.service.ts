@@ -20,7 +20,7 @@ export class CaptchaService {
       throw new BusinessException('验证码发生太频繁');
     }
     const randomCode = Math.random().toString().slice(2, 8);
-    await this.redisService.set(`${key}-${email}`, randomCode, 60);
+    await this.redisService.set(`${key}-${email}`, randomCode, 60 * 5);
     await this.emailService.sedRegisterCaptcha({ to: email, code: randomCode });
   }
 }

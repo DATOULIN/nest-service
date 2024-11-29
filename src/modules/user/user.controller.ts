@@ -38,7 +38,7 @@ export class UserController {
     if (!code) {
       throw new BusinessException('验证码已失效');
     }
-    if (Number(code) !== registerUserDto.captcha) {
+    if (code !== registerUserDto.captcha) {
       throw new BusinessException('验证码不正确');
     }
     const res = await this.userService.register(registerUserDto);
@@ -63,9 +63,10 @@ export class UserController {
   async login(@Body() loginDto: LoginDto) {
     const vo = await this.userService.login(loginDto);
     const token = await this.authService.getToken({
-      userId: vo.id,
+      userId: vo.userId,
       email: vo.email,
     });
+    console.log(await this.authService.decodeToken(token));
     return {
       data: vo,
       token,
@@ -84,7 +85,7 @@ export class UserController {
     if (!code) {
       throw new BusinessException('验证码已失效');
     }
-    if (Number(code) !== resetPasswordDto.captcha) {
+    if (code !== resetPasswordDto.captcha) {
       throw new BusinessException('验证码不正确');
     }
     const res = await this.userService.resetPassword(resetPasswordDto);
@@ -104,7 +105,7 @@ export class UserController {
    * 获取用户信息
    * */
   @Get('info')
-  async info(@UserInfo('userId') userId: number) {
+  async info(@UserInfo('userId') userId: string) {
     const res = await this.userService.getUserInfo(userId);
     if (res === 'error') {
       throw new BusinessException('获取用户失败');

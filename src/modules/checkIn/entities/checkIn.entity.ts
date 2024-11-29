@@ -19,12 +19,12 @@ export class Checkin {
   @Column({ default: 1 })
   consecutiveDays: number;
 
+  @ManyToOne(() => User, (user) => user.checkins)
+  user: User;
+
   @CreateDateColumn()
   createTime: Date;
 
   @UpdateDateColumn()
   updateTime: Date;
-
-  @ManyToOne(() => User, (user) => user.checkins)
-  user: User;
 }
