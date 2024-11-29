@@ -24,3 +24,6 @@ redis_config:
   host: 'redis-container'
   port: '6379'
   db: 0
+security_config:
+  secret: 'justforsecret.12312'
+  expiresIn: '1d'
