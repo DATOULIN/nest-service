@@ -2,9 +2,11 @@ import {
   Column,
   CreateDateColumn,
   Entity,
+  OneToMany,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
+import { Checkin } from '../../checkIn/entities/checkIn.entity';
 
 @Entity({
   name: 'users',
@@ -59,4 +61,7 @@ export class User {
 
   @UpdateDateColumn()
   updateTime: Date;
+
+  @OneToMany(() => Checkin, (checkin) => checkin.user) // 与 Checkin 实体建立一对多关系
+  checkins: Checkin[];
 }

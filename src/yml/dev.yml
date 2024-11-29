@@ -4,7 +4,7 @@ app:
   port: 8005
 mysql_config:
   synchronize: true
-  database: 'nest-service'
+  database: 'nest-service-dev'
   host: '114.55.60.209'
   port: '3306'
   username: 'root'

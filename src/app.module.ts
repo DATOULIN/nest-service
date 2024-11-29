@@ -16,6 +16,7 @@ import { APP_INTERCEPTOR } from '@nestjs/core/constants';
 import { TransformInterceptor } from './common/interceptors/transform.interceptor';
 import { LoggerModule } from './common/modules/logger/logger.module';
 import { CaptchaModule } from './common/modules/captcha/captcha.module';
+import { CheckInModule } from './modules/checkIn/checkIn.module';
 
 @Module({
   imports: [
@@ -38,6 +39,7 @@ import { CaptchaModule } from './common/modules/captcha/captcha.module';
     UploadModule,
     UserModule,
     CaptchaModule,
+    CheckInModule,
   ],
   controllers: [],
   providers: [
